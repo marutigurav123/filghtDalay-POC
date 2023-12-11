@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "dfmaruti1"
+		},
+		"maruti_accessToken": {
+			"value": ""
+		},
+		"maruti_properties_typeProperties_existingClusterId": {
+			"value": "1211-092553-zu6ymehi"
+		}
+	}
+}

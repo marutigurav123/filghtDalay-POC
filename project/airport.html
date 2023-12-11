@@ -1,0 +1,37 @@
+dbutils.fs.mount(
+    source="wasbs://inputontainer@samaruti1.blob.core.windows.net",
+    mount_point="/mnt/maruti2",
+    extra_configs={"fs.azure.account.key.samaruti1.blob.core.windows.net":"RICZVqpBWxv+MqXZdWF9xCu30jpLEN1Eqgx0mQJr3E5mUiWgfucPEbBtI0dk+nDsZ0ZiOw6yy0lv+ASths24Rg=="}
+)
+
+%fs ls
+
+%fs ls dbfs:/mnt/
+
+%fs ls dbfs:/mnt/airline/
+
+%fs ls dbfs:/mnt/airline/rawData/
+
+airlinedf=spark.read.csv("dbfs:/mnt/airline/rawData/airlines.csv",header=True)
+airlinedf.show()
+
+airportdf=spark.read.option("inferSchema","true").option("mode","DropMalformed").csv("dbfs:/mnt/airline/rawData/airports.csv",header=True)
+airportdf.show()
+
+row=airportdf.distinct().count()
+all_rows=airportdf.count()
+col=len(airportdf.columns)
+print(f'Dimension of the Dataframe is: {(row,col)}')
+print(f'Distinct Number of Rows are: {row}')
+print(f'Total Number of Rows are: {all_rows}')
+print(f'Number of Columns are: {col}')
+
+airportdf.count()
+len(airportdf.columns)
+from pyspark.sql.functions import col
+d1=airportdf.filter(col("AIRPORT")=='Northeast Florida Regional Airport (St. Augustine Airport)').show() 
+d1=airportdf.filter(col("AIRPORT")=='Lehigh Valley International Airport').show()
+a2=airportdf.na.fill("missed")
+a2.show()
+a4=airportdf.write.mode("overwrite").option("header","true").csv("dbfs:/mnt/airline/transferData/mari.csv")
+dbutils.fs.unmount("/mnt/maruti2")
